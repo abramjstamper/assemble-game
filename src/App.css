@@ -1,0 +1,30 @@
+/* App Layout */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--app-bg);
+}
+
+.app.theme-light {
+  --app-bg: #F5F5F5;
+  --border-color: #ACA899;
+}
+
+.app.theme-dark {
+  --app-bg: #1A1A2E;
+  --border-color: #4A4A6A;
+}
+
+.game-area {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Remove default margin/padding */
+* {
+  box-sizing: border-box;
+}

@@ -1,0 +1,75 @@
+.stats-bar {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  gap: 16px;
+  border-top: 1px solid var(--stats-border);
+  background: var(--stats-bg);
+  font-size: 13px;
+}
+
+.stats-bar.theme-light {
+  --stats-bg: linear-gradient(180deg, #ECE9D8 0%, #D4D0C8 100%);
+  --stats-border: #ACA899;
+  --stats-text: #000000;
+  --stats-text-secondary: #666666;
+  --stats-label: #333333;
+  --divider-color: #ACA899;
+}
+
+.stats-bar.theme-dark {
+  --stats-bg: linear-gradient(180deg, #2D2D44 0%, #1A1A2E 100%);
+  --stats-border: #4A4A6A;
+  --stats-text: #E0E0FF;
+  --stats-text-secondary: #9090B0;
+  --stats-label: #B0B0D0;
+  --divider-color: #4A4A6A;
+}
+
+.stats-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stats-label {
+  font-weight: bold;
+  color: var(--stats-label);
+  margin-right: 4px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-value {
+  font-weight: bold;
+  color: var(--stats-text);
+}
+
+.stat-name {
+  color: var(--stats-text-secondary);
+}
+
+.player-name {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stats-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--divider-color);
+}
+
+.stats-spacer {
+  flex: 1;
+}
+
+.stats-right {
+  justify-content: flex-end;
+}

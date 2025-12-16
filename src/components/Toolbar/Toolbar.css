@@ -1,0 +1,141 @@
+/* Windows XP Style Toolbar */
+.toolbar {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  gap: 4px;
+  border-bottom: 1px solid var(--toolbar-border);
+  background: var(--toolbar-bg);
+}
+
+/* Light theme variables */
+.toolbar.theme-light {
+  --toolbar-bg: linear-gradient(180deg, #ECE9D8 0%, #D4D0C8 100%);
+  --toolbar-border: #ACA899;
+  --button-bg: linear-gradient(180deg, #FFFFFF 0%, #ECE9D8 50%, #D4D0C8 100%);
+  --button-bg-hover: linear-gradient(180deg, #FFF8E1 0%, #F5F5DC 50%, #E8E4D4 100%);
+  --button-bg-active: linear-gradient(180deg, #D4D0C8 0%, #ECE9D8 100%);
+  --button-border-light: #FFFFFF;
+  --button-border-dark: #706F64;
+  --button-border: #ACA899;
+  --button-text: #000000;
+  --separator-color: #ACA899;
+}
+
+/* Dark theme variables */
+.toolbar.theme-dark {
+  --toolbar-bg: linear-gradient(180deg, #2D2D44 0%, #1A1A2E 100%);
+  --toolbar-border: #4A4A6A;
+  --button-bg: linear-gradient(180deg, #3D3D5C 0%, #2D2D44 50%, #1A1A2E 100%);
+  --button-bg-hover: linear-gradient(180deg, #4D4D6C 0%, #3D3D5C 50%, #2D2D44 100%);
+  --button-bg-active: linear-gradient(180deg, #1A1A2E 0%, #2D2D44 100%);
+  --button-border-light: #5A5A7A;
+  --button-border-dark: #0A0A1E;
+  --button-border: #4A4A6A;
+  --button-text: #E0E0FF;
+  --separator-color: #4A4A6A;
+}
+
+.toolbar-group {
+  display: flex;
+  gap: 2px;
+}
+
+.toolbar-separator {
+  width: 1px;
+  height: 32px;
+  background: var(--separator-color);
+  margin: 0 6px;
+}
+
+.toolbar-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  border: none;
+  border-radius: 2px;
+  background: var(--button-bg);
+  cursor: pointer;
+  position: relative;
+  transition: none;
+
+  /* 3D border effect */
+  box-shadow:
+    inset 1px 1px 0 var(--button-border-light),
+    inset -1px -1px 0 var(--button-border-dark),
+    0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.toolbar-button svg {
+  width: 20px;
+  height: 20px;
+  color: var(--button-text);
+}
+
+.toolbar-button:hover:not(.disabled) {
+  background: var(--button-bg-hover);
+}
+
+.toolbar-button:active:not(.disabled),
+.toolbar-button.active {
+  background: var(--button-bg-active);
+  box-shadow:
+    inset -1px -1px 0 var(--button-border-light),
+    inset 1px 1px 0 var(--button-border-dark);
+}
+
+.toolbar-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.toolbar-button.destructive svg {
+  color: #C62828;
+}
+
+.theme-dark .toolbar-button.destructive svg {
+  color: #FF6B6B;
+}
+
+/* Tooltip styling */
+.toolbar-button::before {
+  content: attr(title);
+  position: absolute;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 1000;
+}
+
+.toolbar-button:hover::before {
+  opacity: 1;
+}
+
+.toolbar-button::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-bottom-color: #333;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.toolbar-button:hover::after {
+  opacity: 1;
+}
