@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { useGameState } from '../../hooks/useGameState';
 import { MIN_SPAWN_RATE, MAX_SPAWN_RATE } from '../../types/game';
 import type { Theme } from '../../types/game';
+import packageJson from '../../../package.json';
 import './Settings.css';
+
+const APP_VERSION = packageJson.version;
+const GITHUB_URL = 'https://github.com/abramjstamper/assemble-game';
 
 function formatTime(ms: number): string {
   const seconds = Math.floor(ms / 1000);
@@ -152,6 +156,21 @@ function SettingsContent() {
             <p className="danger-warning">
               This will clear all saves, statistics, and preferences.
             </p>
+          </div>
+
+          <div className="settings-section about-section">
+            <h3>About</h3>
+            <div className="about-info">
+              <span className="version">Assemble v{APP_VERSION}</span>
+              <a
+                href={GITHUB_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="github-link"
+              >
+                View on GitHub
+              </a>
+            </div>
           </div>
         </div>
       </div>
