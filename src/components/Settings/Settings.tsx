@@ -113,7 +113,7 @@ function SettingsContent() {
                     type="range"
                     min={MIN_SPAWN_RATE}
                     max={MAX_SPAWN_RATE}
-                    step={0.25}
+                    step={0.1}
                     value={state.spawnRate}
                     onChange={handleSpawnRateChange}
                   />

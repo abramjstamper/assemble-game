@@ -62,6 +62,6 @@ export interface UndoState {
 
 export const MAX_BALLS = 1024;
 export const MAX_SHAPES = 256;
-export const MIN_SPAWN_RATE = 0.25; // seconds
+export const MIN_SPAWN_RATE = 0.1; // seconds
 export const MAX_SPAWN_RATE = 10; // seconds
 export const DEFAULT_SPAWN_RATE = 1.5; // seconds

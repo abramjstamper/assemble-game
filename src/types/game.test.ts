@@ -17,8 +17,8 @@ describe('game constants', () => {
   });
 
   describe('spawn rate limits', () => {
-    it('should have minimum spawn rate of 0.25 seconds (spec)', () => {
-      expect(MIN_SPAWN_RATE).toBe(0.25);
+    it('should have minimum spawn rate of 0.1 seconds (spec)', () => {
+      expect(MIN_SPAWN_RATE).toBe(0.1);
     });
 
     it('should have maximum spawn rate of 10 seconds (spec)', () => {
