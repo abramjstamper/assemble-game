@@ -22,6 +22,7 @@
   --button-border: #ACA899;
   --button-active-bg: linear-gradient(180deg, #4A90D9 0%, #3A7BC8 100%);
   --button-active-text: #FFFFFF;
+  --link-color: #4A90D9;
   --danger-bg: #FFEBEE;
   --danger-border: #FFCDD2;
   --danger-button-bg: linear-gradient(180deg, #F44336 0%, #D32F2F 100%);
@@ -41,6 +42,7 @@
   --button-border: #4A4A6A;
   --button-active-bg: linear-gradient(180deg, #FF6B6B 0%, #E05555 100%);
   --button-active-text: #FFFFFF;
+  --link-color: #FF6B6B;
   --danger-bg: #2D1A1A;
   --danger-border: #4A2A2A;
   --danger-button-bg: linear-gradient(180deg, #FF6B6B 0%, #E05555 100%);
@@ -283,7 +285,7 @@
 }
 
 .github-link {
-  color: var(--button-active-bg);
+  color: var(--link-color);
   font-size: 14px;
   text-decoration: none;
 }
