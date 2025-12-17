@@ -44,13 +44,22 @@
   gap: 4px;
 }
 
-.stat-value {
+.stats-bar.theme-light .stat-value {
   font-weight: bold;
-  color: var(--stats-text);
+  color: #000000;
 }
 
-.stat-name {
-  color: var(--stats-text-secondary);
+.stats-bar.theme-dark .stat-value {
+  font-weight: bold;
+  color: #E0E0FF;
+}
+
+.stats-bar.theme-light .stat-name {
+  color: #666666;
+}
+
+.stats-bar.theme-dark .stat-name {
+  color: #9090B0;
 }
 
 .player-name {
