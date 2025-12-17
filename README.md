@@ -2,6 +2,12 @@
 
 A web-based children's physics game where colorful balls drop from the top of the screen and bounce off user-placed objects. Players use their imagination to redirect falling balls using various shapes and ramps.
 
+## Screenshots
+
+| Blacklight Theme | Whimsical Theme |
+|------------------|-----------------|
+| ![Dark theme](docs/screenshot-dark.png) | ![Light theme](docs/screenshot-light.png) |
+
 ## Features
 
 - **Physics-based gameplay** - Balls fall with gravity and bounce off shapes
