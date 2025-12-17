@@ -46,6 +46,7 @@ Game functions are exposed on `window` for cross-component communication:
 - `window.__gameRedo()` - Redo last action
 - `window.__gameClearBalls()` - Clear all balls
 - `window.__gameReset()` - Reset entire session
+- `window.__gameLoadState(saveData)` - Load saved game state (shapes, spawnRate)
 
 Types are declared in `src/types/globals.d.ts`.
 

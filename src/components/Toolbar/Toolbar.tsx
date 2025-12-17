@@ -169,9 +169,18 @@ export function Toolbar() {
     reader.onload = (event) => {
       try {
         const data = JSON.parse(event.target?.result as string);
-        // TODO: Validate and load save data
-        console.log('Loaded save data:', data);
-        alert('Save file loaded! (Full restoration coming soon)');
+
+        // Validate save data structure
+        if (!data || typeof data !== 'object') {
+          throw new Error('Invalid save data');
+        }
+
+        // Load the state using the game's load function
+        window.__gameLoadState?.({
+          shapes: Array.isArray(data.shapes) ? data.shapes : [],
+          spawnRate: typeof data.spawnRate === 'number' ? data.spawnRate : undefined,
+          mode: data.mode,
+        });
       } catch {
         alert('Failed to load save file. Invalid format.');
       }

@@ -121,6 +121,32 @@ export function GameCanvas() {
       clearBalls();
     };
 
+    window.__gameLoadState = (saveData: { shapes?: Shape[]; spawnRate?: number; mode?: string }) => {
+      // Clear all balls from physics world
+      clearAllBalls();
+      clearBalls();
+
+      // Clear all shapes from physics world
+      shapeBodyMapRef.current.forEach((bodyId) => {
+        removeShapeFromWorld(bodyId);
+      });
+      shapeBodyMapRef.current.clear();
+
+      // Add restored shapes to physics world
+      const shapes = saveData.shapes || [];
+      shapes.forEach((shape) => {
+        const body = addShapeToWorld(shape);
+        shapeBodyMapRef.current.set(shape.id, body.id);
+      });
+
+      dispatch({ type: 'SET_SHAPES', payload: shapes });
+
+      // Restore spawn rate if provided
+      if (saveData.spawnRate !== undefined) {
+        dispatch({ type: 'SET_SPAWN_RATE', payload: saveData.spawnRate });
+      }
+    };
+
     window.__gameReset = () => {
       // Clear all shapes from physics world
       clearAllShapes();
@@ -134,6 +160,7 @@ export function GameCanvas() {
       delete window.__gameRedo;
       delete window.__gameClearBalls;
       delete window.__gameReset;
+      delete window.__gameLoadState;
     };
   }, [undoAction, redoAction, dispatch, removeShapeFromWorld, addShapeToWorld, clearAllBalls, clearAllShapes, clearBalls]);
 
