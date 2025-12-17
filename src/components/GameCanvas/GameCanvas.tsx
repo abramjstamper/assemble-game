@@ -200,8 +200,8 @@ export function GameCanvas() {
     return null;
   };
 
-  // Convert mouse coordinates to canvas coordinates (accounting for CSS scaling)
-  const getCanvasCoordinates = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  // Convert client coordinates to canvas coordinates (accounting for CSS scaling)
+  const getCanvasCoordinates = (clientX: number, clientY: number) => {
     const canvas = canvasRef.current;
     const rect = canvas?.getBoundingClientRect();
     if (!rect || !canvas) return null;
@@ -210,19 +210,26 @@ export function GameCanvas() {
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
 
-    const x = (e.clientX - rect.left) * scaleX;
-    const y = (e.clientY - rect.top) * scaleY;
+    const x = (clientX - rect.left) * scaleX;
+    const y = (clientY - rect.top) * scaleY;
 
     return { x, y };
   };
 
-  // Handle mouse down
-  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    const coords = getCanvasCoordinates(e);
-    if (!coords) return;
+  // Get coordinates from mouse event
+  const getMouseCoords = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    return getCanvasCoordinates(e.clientX, e.clientY);
+  };
 
-    const { x, y } = coords;
+  // Get coordinates from touch event
+  const getTouchCoords = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    if (e.touches.length === 0) return null;
+    const touch = e.touches[0];
+    return getCanvasCoordinates(touch.clientX, touch.clientY);
+  };
 
+  // Handle pointer down (shared logic for mouse and touch)
+  const handlePointerDown = (x: number, y: number) => {
     // Check if we're placing a new shape
     if (state.currentTool !== 'select' && state.currentTool !== 'delete') {
       // Save current state for undo
@@ -272,23 +279,20 @@ export function GameCanvas() {
     }
   };
 
-  // Handle mouse move
-  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  // Handle pointer move (shared logic for mouse and touch)
+  const handlePointerMove = (x: number, y: number) => {
     if (!dragState) return;
 
-    const coords = getCanvasCoordinates(e);
-    if (!coords) return;
-
-    const x = coords.x - dragState.offsetX;
-    const y = coords.y - dragState.offsetY;
+    const moveX = x - dragState.offsetX;
+    const moveY = y - dragState.offsetY;
 
     // Clamp to canvas bounds
     const shape = state.shapes.find(s => s.id === dragState.shapeId);
     if (!shape) return;
 
     const { width, height } = getShapeDimensions(shape.type);
-    const clampedX = Math.max(width / 2, Math.min(CANVAS_WIDTH - width / 2, x));
-    const clampedY = Math.max(height / 2, Math.min(CANVAS_HEIGHT - height / 2, y));
+    const clampedX = Math.max(width / 2, Math.min(CANVAS_WIDTH - width / 2, moveX));
+    const clampedY = Math.max(height / 2, Math.min(CANVAS_HEIGHT - height / 2, moveY));
 
     updateShape(dragState.shapeId, { x: clampedX, y: clampedY });
 
@@ -298,13 +302,44 @@ export function GameCanvas() {
     }
   };
 
-  // Handle mouse up
-  const handleMouseUp = () => {
+  // Handle pointer up (shared logic for mouse and touch)
+  const handlePointerUp = () => {
     if (dragState) {
       // Save state after drag for undo
       pushState(state.shapes);
     }
     setDragState(null);
+  };
+
+  // Mouse event handlers
+  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const coords = getMouseCoords(e);
+    if (coords) handlePointerDown(coords.x, coords.y);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const coords = getMouseCoords(e);
+    if (coords) handlePointerMove(coords.x, coords.y);
+  };
+
+  const handleMouseUp = () => handlePointerUp();
+
+  // Touch event handlers
+  const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault(); // Prevent scrolling
+    const coords = getTouchCoords(e);
+    if (coords) handlePointerDown(coords.x, coords.y);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault(); // Prevent scrolling
+    const coords = getTouchCoords(e);
+    if (coords) handlePointerMove(coords.x, coords.y);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    handlePointerUp();
   };
 
   // Handle wheel for rotation
@@ -493,8 +528,12 @@ export function GameCanvas() {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
         onWheel={handleWheel}
-        style={{ cursor: getCursor() }}
+        style={{ cursor: getCursor(), touchAction: 'none' }}
       />
       {state.isPaused && (
         <div className="pause-overlay">

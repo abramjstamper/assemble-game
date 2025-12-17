@@ -140,3 +140,27 @@
 .toolbar-button:hover::after {
   opacity: 1;
 }
+
+/* Responsive: stack toolbar on small screens */
+@media (max-width: 600px) {
+  .toolbar {
+    flex-wrap: wrap;
+    padding: 4px 8px;
+    gap: 2px;
+  }
+
+  .toolbar-button {
+    width: 32px;
+    height: 32px;
+    padding: 4px;
+  }
+
+  .toolbar-button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .toolbar-separator {
+    display: none;
+  }
+}

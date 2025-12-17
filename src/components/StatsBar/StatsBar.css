@@ -83,3 +83,10 @@
 .stats-right {
   justify-content: flex-end;
 }
+
+/* Responsive: hide status bar on small screens */
+@media (max-width: 600px) {
+  .stats-bar {
+    display: none;
+  }
+}
