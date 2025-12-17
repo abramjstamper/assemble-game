@@ -288,14 +288,22 @@ function generateId(): string {
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(gameReducer, null, loadInitialState);
 
-  // Track play time
-  const lastTickRef = useRef<number>(Date.now());
+  // Track play time - initialize in effect to avoid impure function in render
+  const lastTickRef = useRef<number | null>(null);
   useEffect(() => {
-    if (state.isPaused) return;
+    if (state.isPaused) {
+      lastTickRef.current = null;
+      return;
+    }
+
+    // Initialize timestamp when unpaused
+    if (lastTickRef.current === null) {
+      lastTickRef.current = Date.now();
+    }
 
     const interval = setInterval(() => {
       const now = Date.now();
-      const elapsed = now - lastTickRef.current;
+      const elapsed = now - (lastTickRef.current ?? now);
       lastTickRef.current = now;
 
       dispatch({
@@ -409,6 +417,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 }
 
 // Hook to use game state
+// eslint-disable-next-line react-refresh/only-export-components
 export function useGameState(): GameContextValue {
   const context = useContext(GameContext);
   if (!context) {

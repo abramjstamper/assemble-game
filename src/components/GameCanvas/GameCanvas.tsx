@@ -78,7 +78,7 @@ export function GameCanvas() {
 
   // Expose undo/redo functions for toolbar
   useEffect(() => {
-    (window as any).__gameUndo = () => {
+    window.__gameUndo = () => {
       const shapes = undoAction();
       if (shapes) {
         // Remove all current shapes from physics world
@@ -97,7 +97,7 @@ export function GameCanvas() {
       }
     };
 
-    (window as any).__gameRedo = () => {
+    window.__gameRedo = () => {
       const shapes = redoAction();
       if (shapes) {
         // Remove all current shapes from physics world
@@ -116,12 +116,12 @@ export function GameCanvas() {
       }
     };
 
-    (window as any).__gameClearBalls = () => {
+    window.__gameClearBalls = () => {
       clearAllBalls();
       clearBalls();
     };
 
-    (window as any).__gameReset = () => {
+    window.__gameReset = () => {
       // Clear all shapes from physics world
       clearAllShapes();
       shapeBodyMapRef.current.clear();
@@ -130,10 +130,10 @@ export function GameCanvas() {
     };
 
     return () => {
-      delete (window as any).__gameUndo;
-      delete (window as any).__gameRedo;
-      delete (window as any).__gameClearBalls;
-      delete (window as any).__gameReset;
+      delete window.__gameUndo;
+      delete window.__gameRedo;
+      delete window.__gameClearBalls;
+      delete window.__gameReset;
     };
   }, [undoAction, redoAction, dispatch, removeShapeFromWorld, addShapeToWorld, clearAllBalls, clearAllShapes, clearBalls]);
 

@@ -35,14 +35,14 @@ function GameApp() {
         case 'Z':
           if (e.ctrlKey || e.metaKey) {
             e.preventDefault();
-            (window as any).__gameUndo?.();
+            window.__gameUndo?.();
           }
           break;
         case 'y':
         case 'Y':
           if (e.ctrlKey || e.metaKey) {
             e.preventDefault();
-            (window as any).__gameRedo?.();
+            window.__gameRedo?.();
           }
           break;
         case 'Delete':

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { Settings } from './Settings';
 import { GameProvider, useGameState } from '../../hooks/useGameState';
 import type { ReactNode } from 'react';

@@ -172,7 +172,7 @@ export function Toolbar() {
         // TODO: Validate and load save data
         console.log('Loaded save data:', data);
         alert('Save file loaded! (Full restoration coming soon)');
-      } catch (err) {
+      } catch {
         alert('Failed to load save file. Invalid format.');
       }
     };
@@ -181,19 +181,19 @@ export function Toolbar() {
   };
 
   const handleUndo = () => {
-    (window as any).__gameUndo?.();
+    window.__gameUndo?.();
   };
 
   const handleRedo = () => {
-    (window as any).__gameRedo?.();
+    window.__gameRedo?.();
   };
 
   const handleClear = () => {
-    (window as any).__gameClearBalls?.();
+    window.__gameClearBalls?.();
   };
 
   const handleReset = () => {
-    (window as any).__gameReset?.();
+    window.__gameReset?.();
     resetSession();
   };
 

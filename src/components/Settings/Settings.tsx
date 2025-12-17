@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useGameState } from '../../hooks/useGameState';
 import { MIN_SPAWN_RATE, MAX_SPAWN_RATE } from '../../types/game';
 import type { Theme } from '../../types/game';
@@ -20,16 +20,10 @@ function formatTime(ms: number): string {
   return `${seconds}s`;
 }
 
-export function Settings() {
+function SettingsContent() {
   const { state, showSettings, setTheme, setSpawnRate, resetAllData, dispatch } = useGameState();
   const [name, setName] = useState(state.player.name);
   const [confirmReset, setConfirmReset] = useState(false);
-
-  useEffect(() => {
-    setName(state.player.name);
-  }, [state.player.name]);
-
-  if (!state.showSettings) return null;
 
   const handleClose = () => {
     // Save name if changed
@@ -163,4 +157,15 @@ export function Settings() {
       </div>
     </div>
   );
+}
+
+// Wrapper component that remounts SettingsContent when opened
+// This ensures fresh state initialization each time settings open
+export function Settings() {
+  const { state } = useGameState();
+
+  if (!state.showSettings) return null;
+
+  // Key forces remount when settings reopen, giving fresh initial state
+  return <SettingsContent key="settings" />;
 }

@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { GameProvider, useGameState } from './useGameState';
 import type { ReactNode } from 'react';
+import type { Shape } from '../types/shapes';
 
 // Wrapper component for the hook
 const wrapper = ({ children }: { children: ReactNode }) => (
@@ -143,14 +144,14 @@ describe('useGameState', () => {
     it('should return the created shape', () => {
       const { result } = renderHook(() => useGameState(), { wrapper });
 
-      let shape: any;
+      let shape: Shape | undefined;
       act(() => {
         shape = result.current.addShape('largeSquare');
       });
 
       expect(shape).toBeDefined();
-      expect(shape.type).toBe('largeSquare');
-      expect(shape.id).toBeDefined();
+      expect(shape!.type).toBe('largeSquare');
+      expect(shape!.id).toBeDefined();
     });
   });
 

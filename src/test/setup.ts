@@ -51,4 +51,4 @@ HTMLCanvasElement.prototype.getContext = vi.fn(() => ({
   createRadialGradient: vi.fn(() => ({
     addColorStop: vi.fn(),
   })),
-})) as any;
+})) as unknown as typeof HTMLCanvasElement.prototype.getContext;

@@ -86,7 +86,7 @@ describe('Toolbar', () => {
 
   it('should call global undo function when undo clicked', () => {
     const mockUndo = vi.fn();
-    (window as any).__gameUndo = mockUndo;
+    window.__gameUndo = mockUndo;
 
     renderWithProvider(<Toolbar />);
 
@@ -95,12 +95,12 @@ describe('Toolbar', () => {
 
     expect(mockUndo).toHaveBeenCalled();
 
-    delete (window as any).__gameUndo;
+    delete window.__gameUndo;
   });
 
   it('should call global redo function when redo clicked', () => {
     const mockRedo = vi.fn();
-    (window as any).__gameRedo = mockRedo;
+    window.__gameRedo = mockRedo;
 
     renderWithProvider(<Toolbar />);
 
@@ -109,12 +109,12 @@ describe('Toolbar', () => {
 
     expect(mockRedo).toHaveBeenCalled();
 
-    delete (window as any).__gameRedo;
+    delete window.__gameRedo;
   });
 
   it('should call global clear function when clear balls clicked', () => {
     const mockClear = vi.fn();
-    (window as any).__gameClearBalls = mockClear;
+    window.__gameClearBalls = mockClear;
 
     renderWithProvider(<Toolbar />);
 
@@ -123,12 +123,12 @@ describe('Toolbar', () => {
 
     expect(mockClear).toHaveBeenCalled();
 
-    delete (window as any).__gameClearBalls;
+    delete window.__gameClearBalls;
   });
 
   it('should call global reset function when reset clicked', () => {
     const mockReset = vi.fn();
-    (window as any).__gameReset = mockReset;
+    window.__gameReset = mockReset;
 
     renderWithProvider(<Toolbar />);
 
@@ -137,6 +137,6 @@ describe('Toolbar', () => {
 
     expect(mockReset).toHaveBeenCalled();
 
-    delete (window as any).__gameReset;
+    delete window.__gameReset;
   });
 });

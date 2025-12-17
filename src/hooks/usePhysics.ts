@@ -142,6 +142,7 @@ export function usePhysics(options: UsePhysicsOptions): UsePhysicsReturn {
         clearInterval(spawnTimerRef.current);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
   // Handle pause/resume
