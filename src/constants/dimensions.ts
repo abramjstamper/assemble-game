@@ -15,8 +15,8 @@ export const ENDPOINT_DOT_RATIO = 0.01; // 1% of canvas width
 export const ENDPOINT_DOT_DIAMETER = CANVAS_WIDTH * ENDPOINT_DOT_RATIO; // ~16px
 
 // Spawn position
-export const SPAWN_X_RATIO = 0.05; // 5% from left edge
-export const SPAWN_X = CANVAS_WIDTH * SPAWN_X_RATIO; // ~80px
+export const SPAWN_X_RATIO = 0.25; // 25% from left edge
+export const SPAWN_X = CANVAS_WIDTH * SPAWN_X_RATIO; // ~400px
 export const SPAWN_Y = 0; // At top edge
 
 // Physics constants

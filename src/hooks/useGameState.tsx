@@ -324,10 +324,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const addShape = useCallback((type: ShapeType): Shape => {
     const config = SHAPE_CONFIGS[type];
     // Give lines a small initial angle so balls roll off
-    // Randomly tilt left or right by ~5 degrees (0.087 radians)
-    const initialRotation = config.isLine
-      ? (Math.random() > 0.5 ? 0.087 : -0.087)
-      : 0;
+    // Slant right (~5 degrees / 0.087 radians) so balls roll right
+    const initialRotation = config.isLine ? 0.087 : 0;
 
     const shape: Shape = {
       id: generateId(),

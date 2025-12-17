@@ -49,10 +49,10 @@ describe('dimensions', () => {
   });
 
   describe('spawn position', () => {
-    it('should spawn at 5% from left edge (spec)', () => {
-      expect(SPAWN_X_RATIO).toBe(0.05);
+    it('should spawn at 25% from left edge (spec)', () => {
+      expect(SPAWN_X_RATIO).toBe(0.25);
       expect(SPAWN_X).toBe(CANVAS_WIDTH * SPAWN_X_RATIO);
-      expect(SPAWN_X).toBeCloseTo(80);
+      expect(SPAWN_X).toBeCloseTo(400);
     });
 
     it('should spawn at top edge', () => {
