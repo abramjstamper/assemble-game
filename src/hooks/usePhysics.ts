@@ -50,6 +50,8 @@ export function usePhysics(options: UsePhysicsOptions): UsePhysicsReturn {
   useEffect(() => {
     const engine = Matter.Engine.create({
       gravity: { x: 0, y: 1, scale: 0.001 },
+      positionIterations: 10,  // Default is 6, increase for better collision with thin bodies
+      velocityIterations: 8,   // Default is 4, helps prevent tunneling
     });
 
     engineRef.current = engine;
@@ -236,8 +238,13 @@ export function usePhysics(options: UsePhysicsOptions): UsePhysicsReturn {
   const updateShapeInWorld = useCallback((matterBodyId: number, x: number, y: number, rotation: number) => {
     const body = shapeBodiesRef.current.get(matterBodyId);
     if (body) {
+      // Temporarily make non-static to properly update collision bounds
+      Matter.Body.setStatic(body, false);
       Matter.Body.setPosition(body, { x, y });
       Matter.Body.setAngle(body, rotation);
+      Matter.Body.setStatic(body, true);
+      // Ensure body is awake for collision detection
+      Matter.Sleeping.set(body, false);
 
       // Check for ball collisions and remove any balls under the shape
       if (engineRef.current) {
