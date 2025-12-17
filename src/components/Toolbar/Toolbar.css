@@ -6,6 +6,7 @@
   gap: 4px;
   border-bottom: 1px solid var(--toolbar-border);
   background: var(--toolbar-bg);
+  flex-shrink: 0; /* Don't shrink - keep fixed height */
 }
 
 /* Light theme variables */

@@ -6,6 +6,7 @@
   border-top: 1px solid var(--stats-border);
   background: var(--stats-bg);
   font-size: 13px;
+  flex-shrink: 0; /* Don't shrink - keep fixed height */
 }
 
 .stats-bar.theme-light {
