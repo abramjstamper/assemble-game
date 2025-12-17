@@ -8,7 +8,19 @@ import { Settings } from './components/Settings';
 import './App.css';
 
 function GameApp() {
-  const { state, togglePause, showSettings, setTool } = useGameState();
+  const { state, dispatch, togglePause, showSettings, setTool } = useGameState();
+
+  // Auto-pause when tab loses focus
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        dispatch({ type: 'SET_PAUSED', payload: true });
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [dispatch]);
 
   // Keyboard shortcuts
   useEffect(() => {
