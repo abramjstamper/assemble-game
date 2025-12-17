@@ -130,4 +130,22 @@ describe('Settings', () => {
     // Should show confirmation text
     expect(screen.getByText(/Click again to confirm/)).toBeInTheDocument();
   });
+
+  it('should display About section with version', () => {
+    renderWithProvider();
+    fireEvent.click(screen.getByText('Open Settings'));
+
+    expect(screen.getByText('About')).toBeInTheDocument();
+    expect(screen.getByText(/Assemble v\d+\.\d+\.\d+/)).toBeInTheDocument();
+  });
+
+  it('should have GitHub link in About section', () => {
+    renderWithProvider();
+    fireEvent.click(screen.getByText('Open Settings'));
+
+    const githubLink = screen.getByText('View on GitHub');
+    expect(githubLink).toBeInTheDocument();
+    expect(githubLink).toHaveAttribute('href', 'https://github.com/abramjstamper/assemble-game');
+    expect(githubLink).toHaveAttribute('target', '_blank');
+  });
 });
