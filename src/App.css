@@ -21,7 +21,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 12px;
+  min-height: 0; /* Allow flex item to shrink below content size */
+  overflow: hidden;
 }
 
 /* Remove default margin/padding */

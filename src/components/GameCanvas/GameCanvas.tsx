@@ -200,13 +200,28 @@ export function GameCanvas() {
     return null;
   };
 
+  // Convert mouse coordinates to canvas coordinates (accounting for CSS scaling)
+  const getCanvasCoordinates = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    const rect = canvas?.getBoundingClientRect();
+    if (!rect || !canvas) return null;
+
+    // Calculate scale factor between displayed size and actual canvas size
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
+
+    return { x, y };
+  };
+
   // Handle mouse down
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    const rect = canvasRef.current?.getBoundingClientRect();
-    if (!rect) return;
+    const coords = getCanvasCoordinates(e);
+    if (!coords) return;
 
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const { x, y } = coords;
 
     // Check if we're placing a new shape
     if (state.currentTool !== 'select' && state.currentTool !== 'delete') {
@@ -261,11 +276,11 @@ export function GameCanvas() {
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!dragState) return;
 
-    const rect = canvasRef.current?.getBoundingClientRect();
-    if (!rect) return;
+    const coords = getCanvasCoordinates(e);
+    if (!coords) return;
 
-    const x = e.clientX - rect.left - dragState.offsetX;
-    const y = e.clientY - rect.top - dragState.offsetY;
+    const x = coords.x - dragState.offsetX;
+    const y = coords.y - dragState.offsetY;
 
     // Clamp to canvas bounds
     const shape = state.shapes.find(s => s.id === dragState.shapeId);
