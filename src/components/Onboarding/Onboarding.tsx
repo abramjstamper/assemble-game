@@ -27,7 +27,7 @@ export function Onboarding() {
             <li><span className="step-icon">&#9679;</span> Balls spawn automatically from the top</li>
             <li><span className="step-icon">&#128736;</span> Select a shape from the toolbar, then tap to place it</li>
             <li><span className="step-icon">&#128070;</span> Drag shapes to move them</li>
-            <li><span className="step-icon">&#128260;</span> Scroll wheel to rotate shapes (desktop)</li>
+            <li><span className="step-icon">&#128260;</span> Two-finger twist or scroll wheel to rotate shapes</li>
             <li><span className="step-icon">&#128465;</span> Use delete mode or double-tap to remove shapes</li>
           </ul>
         </div>

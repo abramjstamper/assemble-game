@@ -86,7 +86,7 @@ describe('Onboarding', () => {
     expect(screen.getByText(/Balls spawn automatically/)).toBeInTheDocument();
     expect(screen.getByText(/Select a shape from the toolbar/)).toBeInTheDocument();
     expect(screen.getByText(/Drag shapes to move/)).toBeInTheDocument();
-    expect(screen.getByText(/Scroll wheel to rotate/)).toBeInTheDocument();
+    expect(screen.getByText(/Two-finger twist or scroll wheel to rotate/)).toBeInTheDocument();
     expect(screen.getByText(/delete mode or double-tap/)).toBeInTheDocument();
   });
 });

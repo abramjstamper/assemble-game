@@ -20,11 +20,23 @@ interface DragState {
   offsetY: number;
 }
 
+interface PinchState {
+  initialAngle: number;
+  initialRotation: number;
+  shapeId: string;
+}
+
+// Calculate angle between two touch points
+const getTouchAngle = (touch1: React.Touch, touch2: React.Touch): number => {
+  return Math.atan2(touch2.clientY - touch1.clientY, touch2.clientX - touch1.clientX);
+};
+
 export function GameCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const animationFrameRef = useRef<number | undefined>(undefined);
   const [dragState, setDragState] = useState<DragState | null>(null);
+  const [pinchState, setPinchState] = useState<PinchState | null>(null);
 
   const {
     state,
@@ -326,19 +338,66 @@ export function GameCanvas() {
   // Touch event handlers
   const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
     e.preventDefault(); // Prevent scrolling
+
+    // Two-finger touch for rotation
+    if (e.touches.length === 2 && state.selectedShapeId) {
+      const shape = state.shapes.find(s => s.id === state.selectedShapeId);
+      if (shape) {
+        const angle = getTouchAngle(e.touches[0], e.touches[1]);
+        setPinchState({
+          initialAngle: angle,
+          initialRotation: shape.rotation,
+          shapeId: shape.id,
+        });
+        // Save state for undo when starting rotation
+        pushState(state.shapes);
+      }
+      return;
+    }
+
+    // Single finger touch
     const coords = getTouchCoords(e);
     if (coords) handlePointerDown(coords.x, coords.y);
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
     e.preventDefault(); // Prevent scrolling
+
+    // Two-finger rotation
+    if (e.touches.length === 2 && pinchState) {
+      const shape = state.shapes.find(s => s.id === pinchState.shapeId);
+      if (shape) {
+        const currentAngle = getTouchAngle(e.touches[0], e.touches[1]);
+        const angleDelta = currentAngle - pinchState.initialAngle;
+        const newRotation = pinchState.initialRotation + angleDelta;
+
+        updateShape(shape.id, { rotation: newRotation });
+
+        const bodyId = shapeBodyMapRef.current.get(shape.id);
+        if (bodyId) {
+          updateShapeInWorld(bodyId, shape.x, shape.y, newRotation);
+        }
+      }
+      return;
+    }
+
+    // Single finger drag
     const coords = getTouchCoords(e);
     if (coords) handlePointerMove(coords.x, coords.y);
   };
 
   const handleTouchEnd = (e: React.TouchEvent<HTMLCanvasElement>) => {
     e.preventDefault();
-    handlePointerUp();
+
+    // If we were pinching and now have less than 2 fingers, end pinch
+    if (pinchState && e.touches.length < 2) {
+      setPinchState(null);
+    }
+
+    // If no more touches, end drag
+    if (e.touches.length === 0) {
+      handlePointerUp();
+    }
   };
 
   // Handle wheel for rotation
