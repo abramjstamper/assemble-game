@@ -423,25 +423,31 @@ export function GameCanvas() {
         ctx.lineTo(-width / 2, height / 2);
         ctx.stroke();
 
-        // Draw endpoint circles for lines (flush with line, with contrasting outline)
+        // Draw endpoint circles for lines (flush with line, with inset contrasting outline)
         if (isLine) {
           const outlineColor = state.theme === 'dark' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(0, 0, 0, 0.3)';
           const outlineWidth = 2;
+          const radius = ENDPOINT_DOT_DIAMETER / 2;
+          const insetRadius = radius - outlineWidth - 1; // Inset outline inside the circle
 
-          // Left circle
+          // Left circle - fill then inset outline
           ctx.beginPath();
-          ctx.arc(-width / 2, 0, ENDPOINT_DOT_DIAMETER / 2, 0, Math.PI * 2);
+          ctx.arc(-width / 2, 0, radius, 0, Math.PI * 2);
           ctx.fillStyle = color;
           ctx.fill();
+          ctx.beginPath();
+          ctx.arc(-width / 2, 0, insetRadius, 0, Math.PI * 2);
           ctx.strokeStyle = outlineColor;
           ctx.lineWidth = outlineWidth;
           ctx.stroke();
 
-          // Right circle
+          // Right circle - fill then inset outline
           ctx.beginPath();
-          ctx.arc(width / 2, 0, ENDPOINT_DOT_DIAMETER / 2, 0, Math.PI * 2);
+          ctx.arc(width / 2, 0, radius, 0, Math.PI * 2);
           ctx.fillStyle = color;
           ctx.fill();
+          ctx.beginPath();
+          ctx.arc(width / 2, 0, insetRadius, 0, Math.PI * 2);
           ctx.strokeStyle = outlineColor;
           ctx.lineWidth = outlineWidth;
           ctx.stroke();
