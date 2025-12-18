@@ -423,22 +423,28 @@ export function GameCanvas() {
         ctx.lineTo(-width / 2, height / 2);
         ctx.stroke();
 
-        // Draw endpoint dots for lines
+        // Draw endpoint circles for lines (flush with line, with contrasting outline)
         if (isLine) {
-          ctx.fillStyle = color;
-          ctx.globalAlpha = theme.shapes.endpointDotOpacity;
+          const outlineColor = state.theme === 'dark' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(0, 0, 0, 0.3)';
+          const outlineWidth = 2;
 
-          // Left dot
+          // Left circle
           ctx.beginPath();
           ctx.arc(-width / 2, 0, ENDPOINT_DOT_DIAMETER / 2, 0, Math.PI * 2);
+          ctx.fillStyle = color;
           ctx.fill();
+          ctx.strokeStyle = outlineColor;
+          ctx.lineWidth = outlineWidth;
+          ctx.stroke();
 
-          // Right dot
+          // Right circle
           ctx.beginPath();
           ctx.arc(width / 2, 0, ENDPOINT_DOT_DIAMETER / 2, 0, Math.PI * 2);
+          ctx.fillStyle = color;
           ctx.fill();
-
-          ctx.globalAlpha = 1;
+          ctx.strokeStyle = outlineColor;
+          ctx.lineWidth = outlineWidth;
+          ctx.stroke();
         }
 
         // Selection indicator

@@ -6,7 +6,6 @@ import {
   BALL_DIAMETER,
   LINE_THICKNESS_RATIO,
   LINE_THICKNESS,
-  ENDPOINT_DOT_RATIO,
   ENDPOINT_DOT_DIAMETER,
   SPAWN_X_RATIO,
   SPAWN_X,
@@ -35,16 +34,14 @@ describe('dimensions', () => {
   });
 
   describe('line dimensions', () => {
-    it('should have line thickness as 0.5% of canvas width (spec)', () => {
-      expect(LINE_THICKNESS_RATIO).toBe(0.005);
+    it('should have line thickness as 1.25% of canvas width', () => {
+      expect(LINE_THICKNESS_RATIO).toBe(0.0125);
       expect(LINE_THICKNESS).toBe(CANVAS_WIDTH * LINE_THICKNESS_RATIO);
-      expect(LINE_THICKNESS).toBeCloseTo(8);
+      expect(LINE_THICKNESS).toBeCloseTo(20);
     });
 
-    it('should have endpoint dot as 1% of canvas width (spec)', () => {
-      expect(ENDPOINT_DOT_RATIO).toBe(0.01);
-      expect(ENDPOINT_DOT_DIAMETER).toBe(CANVAS_WIDTH * ENDPOINT_DOT_RATIO);
-      expect(ENDPOINT_DOT_DIAMETER).toBeCloseTo(16);
+    it('should have endpoint dot diameter equal to line thickness (flush fit)', () => {
+      expect(ENDPOINT_DOT_DIAMETER).toBe(LINE_THICKNESS);
     });
   });
 

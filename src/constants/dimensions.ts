@@ -6,13 +6,12 @@ export const CANVAS_HEIGHT = 900;
 export const BALL_DIAMETER_RATIO = 0.015; // 1.5% of canvas width
 export const BALL_DIAMETER = CANVAS_WIDTH * BALL_DIAMETER_RATIO; // ~24px
 
-// Line thickness (relative to canvas width)
-export const LINE_THICKNESS_RATIO = 0.005; // 0.5% of canvas width
-export const LINE_THICKNESS = CANVAS_WIDTH * LINE_THICKNESS_RATIO; // ~8px
+// Line thickness (relative to canvas width) - matches endpoint circles for flush fit
+export const LINE_THICKNESS_RATIO = 0.0125; // 1.25% of canvas width
+export const LINE_THICKNESS = CANVAS_WIDTH * LINE_THICKNESS_RATIO; // ~20px
 
-// Endpoint dot diameter for lines
-export const ENDPOINT_DOT_RATIO = 0.01; // 1% of canvas width
-export const ENDPOINT_DOT_DIAMETER = CANVAS_WIDTH * ENDPOINT_DOT_RATIO; // ~16px
+// Endpoint dot diameter for lines - same as line thickness so they're flush
+export const ENDPOINT_DOT_DIAMETER = LINE_THICKNESS;
 
 // Spawn position
 export const SPAWN_X_RATIO = 0.25; // 25% from left edge
