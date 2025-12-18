@@ -429,7 +429,7 @@ export function GameCanvas() {
           const outlineWidth = 2;
           const radius = height / 2;
           const insetRadius = radius - outlineWidth - 3;
-          // Offset to visually center with 3D outline effect (-1 compensates for bottom shadow)
+          // Offset to visually center with 3D outline effect
           const yOffset = -1;
 
           // Left circle - fill then inset outline
