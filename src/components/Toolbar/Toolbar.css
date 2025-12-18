@@ -170,23 +170,24 @@
   }
 }
 
-/* Responsive: stack toolbar on small screens */
+/* Responsive: wrap toolbar on small screens */
 @media (max-width: 600px) {
   .toolbar {
     flex-wrap: wrap;
     padding: 4px 8px;
     gap: 2px;
+    padding-top: calc(4px + env(safe-area-inset-top));
   }
 
   .toolbar-button {
-    width: 32px;
-    height: 32px;
-    padding: 4px;
+    width: 28px;
+    height: 28px;
+    padding: 3px;
   }
 
   .toolbar-button svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
   }
 
   .toolbar-separator {

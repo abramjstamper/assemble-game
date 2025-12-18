@@ -37,6 +37,48 @@ export function GameCanvas() {
   const animationFrameRef = useRef<number | undefined>(undefined);
   const [dragState, setDragState] = useState<DragState | null>(null);
   const [pinchState, setPinchState] = useState<PinchState | null>(null);
+  const [canvasSize, setCanvasSize] = useState({ width: CANVAS_WIDTH, height: CANVAS_HEIGHT });
+
+  // Dynamic canvas sizing based on container
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const updateCanvasSize = () => {
+      const rect = container.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+
+      // Calculate size maintaining 16:9 aspect ratio
+      const aspectRatio = CANVAS_WIDTH / CANVAS_HEIGHT;
+      let width = rect.width;
+      let height = rect.height;
+
+      if (width / height > aspectRatio) {
+        // Container is wider than 16:9, constrain by height
+        width = height * aspectRatio;
+      } else {
+        // Container is taller than 16:9, constrain by width
+        height = width / aspectRatio;
+      }
+
+      setCanvasSize({
+        width: Math.floor(width * dpr),
+        height: Math.floor(height * dpr),
+      });
+    };
+
+    updateCanvasSize();
+
+    const resizeObserver = new ResizeObserver(updateCanvasSize);
+    resizeObserver.observe(container);
+
+    window.addEventListener('orientationchange', updateCanvasSize);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('orientationchange', updateCanvasSize);
+    };
+  }, []);
 
   const {
     state,
@@ -49,6 +91,7 @@ export function GameCanvas() {
     clearBalls,
     incrementBallsDropped,
     setTool,
+    togglePause,
     dispatch,
   } = useGameState();
 
@@ -211,18 +254,19 @@ export function GameCanvas() {
     return null;
   };
 
-  // Convert client coordinates to canvas coordinates (accounting for CSS scaling)
+  // Convert client coordinates to game coordinates (accounting for CSS scaling and canvas scaling)
   const getCanvasCoordinates = (clientX: number, clientY: number) => {
     const canvas = canvasRef.current;
     const rect = canvas?.getBoundingClientRect();
     if (!rect || !canvas) return null;
 
-    // Calculate scale factor between displayed size and actual canvas size
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
+    // Convert screen position to canvas pixel position
+    const canvasX = (clientX - rect.left) * (canvas.width / rect.width);
+    const canvasY = (clientY - rect.top) * (canvas.height / rect.height);
 
-    const x = (clientX - rect.left) * scaleX;
-    const y = (clientY - rect.top) * scaleY;
+    // Convert canvas pixels to game coordinates (1600x900 virtual space)
+    const x = (canvasX / canvasSize.width) * CANVAS_WIDTH;
+    const y = (canvasY / canvasSize.height) * CANVAS_HEIGHT;
 
     return { x, y };
   };
@@ -335,19 +379,40 @@ export function GameCanvas() {
 
   const handleMouseUp = () => handlePointerUp();
 
+  // Get midpoint of two touches in canvas coordinates
+  const getTwoTouchMidpoint = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    if (e.touches.length < 2) return null;
+    const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+    const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+    return getCanvasCoordinates(midX, midY);
+  };
+
   // Touch event handlers
   const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
     e.preventDefault(); // Prevent scrolling
 
     // Two-finger touch for rotation
-    if (e.touches.length === 2 && state.selectedShapeId) {
-      const shape = state.shapes.find(s => s.id === state.selectedShapeId);
-      if (shape) {
+    if (e.touches.length === 2) {
+      // Find shape under the midpoint of the two fingers
+      const midpoint = getTwoTouchMidpoint(e);
+      let shapeToRotate = state.selectedShapeId
+        ? state.shapes.find(s => s.id === state.selectedShapeId)
+        : null;
+
+      // If no shape selected, try to find one under the touch midpoint
+      if (!shapeToRotate && midpoint) {
+        shapeToRotate = findShapeAtPoint(midpoint.x, midpoint.y);
+        if (shapeToRotate) {
+          selectShape(shapeToRotate.id);
+        }
+      }
+
+      if (shapeToRotate) {
         const angle = getTouchAngle(e.touches[0], e.touches[1]);
         setPinchState({
           initialAngle: angle,
-          initialRotation: shape.rotation,
-          shapeId: shape.id,
+          initialRotation: shapeToRotate.rotation,
+          shapeId: shapeToRotate.id,
         });
         // Save state for undo when starting rotation
         pushState(state.shapes);
@@ -369,7 +434,9 @@ export function GameCanvas() {
       if (shape) {
         const currentAngle = getTouchAngle(e.touches[0], e.touches[1]);
         const angleDelta = currentAngle - pinchState.initialAngle;
-        const newRotation = pinchState.initialRotation + angleDelta;
+        // Apply rotation multiplier for more responsive feel
+        const rotationMultiplier = 1.5;
+        const newRotation = pinchState.initialRotation + (angleDelta * rotationMultiplier);
 
         updateShape(shape.id, { rotation: newRotation });
 
@@ -430,10 +497,18 @@ export function GameCanvas() {
     const ctx = canvas?.getContext('2d');
     if (!canvas || !ctx) return;
 
+    // Calculate scale factor from game coordinates to canvas pixels
+    const scaleX = canvasSize.width / CANVAS_WIDTH;
+    const scaleY = canvasSize.height / CANVAS_HEIGHT;
+
     const render = () => {
-      // Clear canvas
+      // Reset transform and clear canvas
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.fillStyle = theme.canvasBackground;
-      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+      ctx.fillRect(0, 0, canvasSize.width, canvasSize.height);
+
+      // Apply scale transform for game coordinate system
+      ctx.setTransform(scaleX, 0, 0, scaleY, 0, 0);
 
       // Draw shapes
       state.shapes.forEach((shape) => {
@@ -487,8 +562,7 @@ export function GameCanvas() {
           const outlineWidth = 2;
           const radius = height / 2;
           const insetRadius = radius - outlineWidth - 3;
-          // Offset to visually center with 3D outline effect
-          const yOffset = -1;
+          const yOffset = 0;
 
           // Left circle - fill then inset outline
           ctx.beginPath();
@@ -580,7 +654,7 @@ export function GameCanvas() {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [state.shapes, state.balls, state.selectedShapeId, state.theme, theme, getBallPositions]);
+  }, [state.shapes, state.balls, state.selectedShapeId, state.theme, theme, getBallPositions, canvasSize]);
 
   // Update cursor based on tool
   const getCursor = () => {
@@ -594,8 +668,8 @@ export function GameCanvas() {
     <div ref={containerRef} className="game-canvas-container">
       <canvas
         ref={canvasRef}
-        width={CANVAS_WIDTH}
-        height={CANVAS_HEIGHT}
+        width={canvasSize.width}
+        height={canvasSize.height}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -608,8 +682,9 @@ export function GameCanvas() {
         style={{ cursor: getCursor(), touchAction: 'none' }}
       />
       {state.isPaused && (
-        <div className="pause-overlay">
+        <div className="pause-overlay" onClick={togglePause} onTouchEnd={togglePause}>
           <span>PAUSED</span>
+          <span className="pause-hint">Tap to resume</span>
         </div>
       )}
     </div>
