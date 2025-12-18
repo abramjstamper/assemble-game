@@ -59,7 +59,47 @@
   font-size: 16px;
   color: var(--text-color);
   text-align: center;
-  margin: 0 0 32px 0;
+  margin: 0 0 24px 0;
+}
+
+.how-to-play {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+
+.how-to-play h2 {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--title-color);
+  margin: 0 0 12px 0;
+}
+
+.how-to-play ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.how-to-play li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-color);
+  line-height: 1.4;
+}
+
+.how-to-play .step-icon {
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+  font-size: 14px;
 }
 
 .onboarding-form {

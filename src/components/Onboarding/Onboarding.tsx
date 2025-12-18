@@ -21,6 +21,17 @@ export function Onboarding() {
         <h1 className="onboarding-title">Assemble</h1>
         <p className="onboarding-subtitle">Redirect falling balls using your imagination!</p>
 
+        <div className="how-to-play">
+          <h2>How to Play</h2>
+          <ul>
+            <li><span className="step-icon">&#9679;</span> Balls spawn automatically from the top</li>
+            <li><span className="step-icon">&#128736;</span> Select a shape from the toolbar, then click to place it</li>
+            <li><span className="step-icon">&#128070;</span> Drag shapes to move them</li>
+            <li><span className="step-icon">&#128260;</span> Scroll wheel or pinch to rotate shapes</li>
+            <li><span className="step-icon">&#128465;</span> Use delete mode or double-click to remove shapes</li>
+          </ul>
+        </div>
+
         <div className="onboarding-form">
           <div className="form-group">
             <label htmlFor="player-name">Your Name</label>

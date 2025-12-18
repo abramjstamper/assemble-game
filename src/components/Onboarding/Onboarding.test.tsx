@@ -78,4 +78,15 @@ describe('Onboarding', () => {
 
     expect(darkButton).toHaveClass('active');
   });
+
+  it('should display How to Play instructions', () => {
+    renderWithProvider(<Onboarding />);
+
+    expect(screen.getByText('How to Play')).toBeInTheDocument();
+    expect(screen.getByText(/Balls spawn automatically/)).toBeInTheDocument();
+    expect(screen.getByText(/Select a shape from the toolbar/)).toBeInTheDocument();
+    expect(screen.getByText(/Drag shapes to move/)).toBeInTheDocument();
+    expect(screen.getByText(/Scroll wheel or pinch to rotate/)).toBeInTheDocument();
+    expect(screen.getByText(/delete mode or double-click/)).toBeInTheDocument();
+  });
 });
