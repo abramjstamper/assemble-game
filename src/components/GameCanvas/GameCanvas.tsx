@@ -427,27 +427,29 @@ export function GameCanvas() {
         if (isLine) {
           const outlineColor = state.theme === 'dark' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(0, 0, 0, 0.3)';
           const outlineWidth = 2;
-          const radius = ENDPOINT_DOT_DIAMETER / 2;
-          const insetRadius = radius - outlineWidth - 1; // Inset outline inside the circle
+          const radius = height / 2;
+          const insetRadius = radius - outlineWidth - 3;
+          // Offset to visually center with 3D outline effect (-1 compensates for bottom shadow)
+          const yOffset = -1;
 
           // Left circle - fill then inset outline
           ctx.beginPath();
-          ctx.arc(-width / 2, 0, radius, 0, Math.PI * 2);
+          ctx.arc(-width / 2, yOffset, radius, 0, Math.PI * 2);
           ctx.fillStyle = color;
           ctx.fill();
           ctx.beginPath();
-          ctx.arc(-width / 2, 0, insetRadius, 0, Math.PI * 2);
+          ctx.arc(-width / 2, yOffset, insetRadius, 0, Math.PI * 2);
           ctx.strokeStyle = outlineColor;
           ctx.lineWidth = outlineWidth;
           ctx.stroke();
 
           // Right circle - fill then inset outline
           ctx.beginPath();
-          ctx.arc(width / 2, 0, radius, 0, Math.PI * 2);
+          ctx.arc(width / 2, yOffset, radius, 0, Math.PI * 2);
           ctx.fillStyle = color;
           ctx.fill();
           ctx.beginPath();
-          ctx.arc(width / 2, 0, insetRadius, 0, Math.PI * 2);
+          ctx.arc(width / 2, yOffset, insetRadius, 0, Math.PI * 2);
           ctx.strokeStyle = outlineColor;
           ctx.lineWidth = outlineWidth;
           ctx.stroke();
