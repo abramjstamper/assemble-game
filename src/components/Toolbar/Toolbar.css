@@ -97,8 +97,16 @@
   color: #C62828;
 }
 
+.toolbar-button.destructive svg line {
+  stroke: #C62828;
+}
+
 .theme-dark .toolbar-button.destructive svg {
   color: #FF6B6B;
+}
+
+.theme-dark .toolbar-button.destructive svg line {
+  stroke: #FF6B6B;
 }
 
 /* Tooltip styling */
@@ -139,6 +147,27 @@
 
 .toolbar-button:hover::after {
   opacity: 1;
+}
+
+/* Touch/tap feedback for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .toolbar-button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .toolbar-button:active:not(.disabled) {
+    background: var(--button-bg-active);
+    box-shadow:
+      inset -1px -1px 0 var(--button-border-light),
+      inset 1px 1px 0 var(--button-border-dark);
+    transform: scale(0.95);
+  }
+
+  /* Hide CSS tooltips on touch devices */
+  .toolbar-button::before,
+  .toolbar-button::after {
+    display: none;
+  }
 }
 
 /* Responsive: stack toolbar on small screens */

@@ -7,7 +7,6 @@ import {
   CANVAS_HEIGHT,
   BALL_DIAMETER,
   LINE_THICKNESS,
-  ENDPOINT_DOT_DIAMETER,
 } from '../../constants/dimensions';
 import { getShapeColor } from '../../constants/colors';
 import { getTheme } from '../../themes';

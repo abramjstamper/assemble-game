@@ -53,10 +53,12 @@ const DeleteIcon = () => (
   </svg>
 );
 
-const ClearIcon = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor">
-    <path d="M5 13h14v-2H5v2zm-2 4h14v-2H3v2zM7 7v2h14V7H7z" />
-    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" transform="translate(2,2) scale(0.6)" />
+const ClearBallsIcon = () => (
+  <svg viewBox="0 0 24 24">
+    {/* Ball/circle outline */}
+    <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" strokeWidth="2" />
+    {/* Red diagonal slash */}
+    <line x1="5" y1="5" x2="19" y2="19" stroke="#C62828" strokeWidth="2.5" strokeLinecap="round" />
   </svg>
 );
 
@@ -315,7 +317,7 @@ export function Toolbar() {
           className="destructive"
         />
         <ToolbarButton
-          icon={<ClearIcon />}
+          icon={<ClearBallsIcon />}
           tooltip="Clear all balls"
           onClick={handleClear}
           className="destructive"
